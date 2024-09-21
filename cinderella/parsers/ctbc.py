@@ -18,7 +18,7 @@ class CTBC(StatementParser):
         super().__init__()
         self.default_source_accounts = {
             StatementType.creditcard: "Liabilities:CreditCard:CTBC",
-            StatementType.bank: "Assets:Bank:CTBC",
+            StatementType.bank: "Assets:Bank:TW:CTBC",
         }
 
     def _read_statement(self, filepath: str) -> pd.DataFrame:
