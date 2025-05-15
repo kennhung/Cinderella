@@ -1,3 +1,6 @@
+from decimal import Decimal
+from beancount.core.data import Amount
+
 from cinderella.beanlayer import BeanCountAPI
 from cinderella.datatypes import Transactions
 from cinderella.settings import CinderellaSettings
@@ -26,6 +29,22 @@ class AccountClassifier:
                 transaction, pattern_maps, self.default_expense_account
             )
             amount = transaction.postings[0].units
+
+            if "foreign_currency" in transaction.postings[0].meta:
+                foreign_currency = transaction.postings[0].meta["foreign_currency"]
+                foreign_price = Decimal(transaction.postings[0].meta["foreign_price"])
+
+                transaction.postings[0].meta.pop("foreign_currency")
+                transaction.postings[0].meta.pop("foreign_price")
+
+                ntd_price = transaction.postings[0].units.number
+                bean_price = Amount(abs((ntd_price / foreign_price).quantize(Decimal(".00000001"))), "TWD")
+
+                amount = self.beancount_api.make_amount(Decimal(foreign_price), foreign_currency)
+                posting = self.beancount_api.make_posting(account, amount, price=bean_price)
+                transaction.postings.append(posting)
+                continue
+
             self.beancount_api.create_and_add_transaction_posting(
                 transaction, account, -amount.number, amount.currency
             )

@@ -41,10 +41,14 @@ class TransactionProcessor:
         """
 
         def hash_function(transaction: Transaction, date_delta: int):
+            narration = transaction.narration
+            if "c_narration" in transaction.meta:
+                narration = transaction.meta['c_narration']
+            
             result = (
                 transaction.date + timedelta(days=date_delta),
                 transaction.postings[0].units,
-                transaction.narration,
+                narration,
             )
             return result
 

@@ -95,6 +95,11 @@ class Cinderella:
             lookback_days=self.settings.ledger_processing_settings.transfer_matching_days,
         )
 
+        # sort transactions
+        for transactions_list in transactions_group.values():
+            for transactions in transactions_list:
+                transactions.sort(key=lambda x: x.date)
+
         # output
         path = (
             Path(self.settings.beancount_settings.output_beanfiles_folder)

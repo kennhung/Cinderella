@@ -195,13 +195,13 @@ class BeanCountAPI:
 
         # search transaction meta
         for comment in transaction.meta.values():
-            if bool(re.search(regex, comment)):
+            if type(comment) == str and bool(re.search(regex, comment)):
                 return True
 
         # search postings meta
         for posting in transaction.postings:
             for comment in posting.meta.values():
-                if bool(re.search(regex, comment)):
+                if type(comment) == str and bool(re.search(regex, comment)):
                     return True
 
         return False
