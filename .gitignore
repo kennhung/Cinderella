@@ -4,3 +4,4 @@ __pycache__
 .*
 mappings/
 statements/
+config.json
