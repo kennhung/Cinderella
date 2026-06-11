@@ -26,8 +26,8 @@ class LineMain(StatementParser):
         transactions = Transactions(category, self.identifier)
 
         for _, record in records.iterrows():
-            dates = record["消費日/入帳日"].split(" /")
-            date = datetime.strptime(dates[0], "%Y.%m.%d")
+            dates = record["消費日/入帳日"].split("/")
+            date = datetime.strptime(dates[0].strip(), "%Y.%m.%d")
             title = record["交易說明"]
 
             if pd.notna(record["新臺幣金額"]):
